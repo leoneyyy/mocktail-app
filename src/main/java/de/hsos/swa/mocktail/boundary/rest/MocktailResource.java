@@ -72,7 +72,7 @@ public class MocktailResource {
 
     @DELETE
     @Path("{id}")
-    public Response deleteMocktail(@PathParam("id") long id){
+    public Response loescheMocktail(@PathParam("id") long id){
         loeschen.loesche(id);
         return Response.noContent().build();
     }
