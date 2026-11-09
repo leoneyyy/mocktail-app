@@ -1,22 +1,40 @@
 package de.hsos.swa.mocktail.control;
 
 import de.hsos.swa.mocktail.entity.Mocktail;
+import de.hsos.swa.mocktail.entity.MocktailKatalog;
+import de.hsos.swa.mocktail.entity.MocktailNichtGefundenExeption;
+import jakarta.inject.Inject;
 
+import java.util.Comparator;
 import java.util.List;
 
-public class SucheMocktails implements MocktailAbfragen {
-    @Override
-    public List<Mocktail> alle() {
-        return List.of();
+public class SucheMocktails {
+
+
+    @Inject
+    MocktailKatalog katalog;
+
+    public List<Mocktail> alle(){
+        return katalog.alle().stream().sorted(Comparator.comparingLong(Mocktail::getId)).toList();
     }
 
-    @Override
-    public List<Mocktail> suche(String name, String zutat) {
-        return List.of();
+    public List<Mocktail> suche(String name, String zutat){
+        return alle().stream().filter(mocktail -> istLeer(name) || mocktail.getName().toLowerCase().contains(name.toLowerCase()))
+                .filter(mocktail -> istLeer(zutat) || mocktail.enthaeltZutat(zutat)).toList();
     }
 
-    @Override
-    public Mocktail finde(long id) {
-        return null;
+    private static boolean istLeer(String text){
+        return text == null || text.isBlank();
     }
+
+    public Mocktail finde(long id){
+        Mocktail mocktail = katalog.finde(id);
+        if(mocktail == null){
+            throw new MocktailNichtGefundenExeption(id);
+        }
+        return mocktail;
+    }
+
+
+
 }
