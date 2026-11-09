@@ -38,8 +38,6 @@ public class MocktailResource {
 
     @Inject
     MocktailLoeschen loeschen;
-    @Inject
-    UriInfo uriInfo;
 
     @GET
     public List<MocktailDTO> alleMocktails(@QueryParam("name") String name,@QueryParam("zutat") String zutat){
@@ -75,7 +73,7 @@ public class MocktailResource {
     @DELETE
     @Path("{id}")
     public Response deleteMocktail(@PathParam("id") long id){
-        loeschen.loeschen(id);
+        loeschen.loesche(id);
         return Response.noContent().build();
     }
 

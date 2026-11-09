@@ -2,7 +2,7 @@ package de.hsos.swa.mocktail.control;
 
 import de.hsos.swa.mocktail.entity.Mocktail;
 import de.hsos.swa.mocktail.entity.MocktailKatalog;
-import de.hsos.swa.mocktail.entity.MocktailNichtGefundenExeption;
+import de.hsos.swa.mocktail.entity.MocktailNichtGefundenException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -31,7 +31,7 @@ public class SucheMocktails {
     public Mocktail finde(long id){
         Mocktail mocktail = katalog.finde(id);
         if(mocktail == null){
-            throw new MocktailNichtGefundenExeption(id);
+            throw new MocktailNichtGefundenException(id);
         }
         return mocktail;
     }
