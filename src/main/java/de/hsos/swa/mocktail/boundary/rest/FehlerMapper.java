@@ -3,9 +3,10 @@ package de.hsos.swa.mocktail.boundary.rest;
 import de.hsos.swa.mocktail.entity.MocktailNichtGefundenExeption;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
 
 import java.util.Map;
-
+@Provider
 public class FehlerMapper implements ExceptionMapper<MocktailNichtGefundenExeption> {
     @Override
     public Response toResponse(MocktailNichtGefundenExeption exception) {
