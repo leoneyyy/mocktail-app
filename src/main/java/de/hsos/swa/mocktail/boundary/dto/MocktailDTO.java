@@ -11,7 +11,7 @@ public class MocktailDTO {
     public String name;
     public String beschreibung;
     public String zubereitung;
-    List<ZutatDTO> zutaten;
+    public List<ZutatDTO> zutaten;
 
     public MocktailDTO(){}
 

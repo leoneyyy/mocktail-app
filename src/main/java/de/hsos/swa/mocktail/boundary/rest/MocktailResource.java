@@ -8,6 +8,7 @@ import de.hsos.swa.mocktail.control.MocktailAendern;
 import de.hsos.swa.mocktail.control.MocktailErstellen;
 import de.hsos.swa.mocktail.control.MocktailLoeschen;
 import de.hsos.swa.mocktail.entity.Mocktail;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -19,6 +20,7 @@ import java.net.URI;
 import java.util.List;
 
 @Path("/mocktails")
+@ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class MocktailResource {
@@ -75,6 +77,12 @@ public class MocktailResource {
     public Response deleteMocktail(@PathParam("id") long id){
         loeschen.loeschen(id);
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("{id}")
+    public MocktailDTO mocktail(@PathParam("id") long id){
+        return MocktailDTO.von(abfragen.finde(id));
     }
 
 
