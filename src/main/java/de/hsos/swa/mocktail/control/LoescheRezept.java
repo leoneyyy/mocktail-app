@@ -1,4 +1,4 @@
 package de.hsos.swa.mocktail.control;
 
-public class LoeschenRezept {
+public class LoescheRezept {
 }
