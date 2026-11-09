@@ -24,31 +24,31 @@ public class BarKeeperIn implements MocktailAendern, MocktailErstellen, Mocktail
 
     @Override
     public List<Mocktail> alle() {
-        return sucheMocktails.;
+        return sucheMocktails.alle();
     }
 
     @Override
     public List<Mocktail> suche(String name, String zutat) {
-        return List.of();
+        return sucheMocktails.suche(name, zutat);
     }
 
     @Override
     public Mocktail finde(long id) {
-        return null;
+        return sucheMocktails.finde(id);
     }
 
     @Override
     public Mocktail aendere(long id, String name, String beschreibung, String zubereitung, List<Zutat> zutaten) {
-        return null;
+        return aendereMocktail.aendere(id,name,beschreibung,zubereitung,zutaten);
     }
 
     @Override
     public Mocktail erstelle(String name, String beschreibung, String zubereitung, List<Zutat> zutaten) {
-        return null;
+        return erstelleMocktail.erstelle(name, beschreibung,zubereitung,zutaten);
     }
 
     @Override
     public void loeschen(long id) {
-
+        loescheMocktail.loeschen(id);
     }
 }
