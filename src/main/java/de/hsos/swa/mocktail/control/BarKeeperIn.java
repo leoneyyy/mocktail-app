@@ -33,7 +33,7 @@ public class BarKeeperIn implements MocktailAendern, MocktailErstellen, Mocktail
     }
 
     @Override
-    public void loesche(long id) {
+    public void loeschen(long id) {
 
     }
 }
