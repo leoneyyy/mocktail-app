@@ -132,8 +132,14 @@ Weitere Codes beim Testen:
 | 500 | Exception im Server – meist fehlt ein ExceptionMapper oder ein Bug |
 
 ---
+# Swagger
 
+http://localhost:8080/q/swagger-ui
+---
 
 ```
 
 Pfade in Git Bash: `/c/Users/Leon/...` (mit `/`), nicht `C:\Users\Leon\...`.
+
+
+
