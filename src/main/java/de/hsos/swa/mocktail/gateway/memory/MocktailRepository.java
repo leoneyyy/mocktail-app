@@ -9,13 +9,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @ApplicationScoped
 public class MocktailRepository implements MocktailKatalog {
 
 
-    private final Map<Long, Mocktail> mocktails = new ConcurrentHashMap<>();
+    private final Map<Long, Mocktail> mocktails = new ConcurrentSkipListMap<>();
 
     private final AtomicLong idGenerator = new AtomicLong(1);
 

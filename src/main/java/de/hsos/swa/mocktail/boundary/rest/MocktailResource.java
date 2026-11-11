@@ -45,7 +45,7 @@ public class MocktailResource {
         if(name == null && zutat == null){
             mocktails = abfragen.alle();
         }else {
-            mocktails =abfragen.suche(name, zutat);
+            mocktails=abfragen.suche(name, zutat);
         }
         return mocktails.stream().map(MocktailDTO::von).toList();
 

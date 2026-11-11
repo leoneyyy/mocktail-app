@@ -32,8 +32,12 @@ public class Mocktail {
     }
 
     public boolean enthaeltZutat(String zutat){
-        String name = zutat.toLowerCase();
-        return zutaten.stream().anyMatch(z -> z.name().toLowerCase().contains(name));
+        for (Zutat z : zutaten) {
+            if (z.name().toLowerCase().contains(zutat.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public long getId() {
