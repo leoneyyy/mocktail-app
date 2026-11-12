@@ -1,7 +1,5 @@
 package de.hsos.swa.mocktail.entity;
 
-import de.hsos.swa.mocktail.boundary.dto.ZutatDTO;
-
 import java.util.*;
 
 public class Mocktail {

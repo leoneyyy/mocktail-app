@@ -11,8 +11,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.awt.*;
-
 @Path("/mocktails/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -27,13 +25,12 @@ public class MocktailIdRessource {
         if(dto == null){
             throw new IllegalArgumentException("Request fehlt");
         }
-        if(katalog.finde(id) == null){
+        Mocktail vorhandener = katalog.finde(id);
+        if(vorhandener == null){
             throw new MocktailNichtGefundenException(id);
         }
-
-        Mocktail geaendert = new Mocktail(dto.name, dto.beschreibung, dto.zubereitung, dto.zutatenAlsEntity());
-        geaendert.setId(id);
-        return MocktailDTO.von(katalog.speichere(geaendert));
+        vorhandener.aendere(dto.name, dto.beschreibung, dto.zubereitung, dto.zutatenAlsEntity());
+        return MocktailDTO.von(katalog.speichere(vorhandener));
     }
 
     @DELETE
