@@ -1,0 +1,42 @@
+### Alle Mocktails
+GET http://localhost:8080/mocktails
+
+### Filtern nach Zutat
+GET http://localhost:8080/mocktails?zutat=minze
+
+### Einen Mocktail
+GET http://localhost:8080/mocktails/1
+
+### Anlegen -> 201
+POST http://localhost:8080/mocktails
+Content-Type: application/json
+
+{
+  "name": "Shirley Temple",
+  "beschreibung": "süß und fruchtig",
+  "zubereitung": "Ginger Ale auf Eis, Grenadine dazu",
+  "zutaten": [
+    { "name": "Ginger Ale", "menge": 200, "einheit": "ml" },
+    { "name": "Grenadine", "menge": 10, "einheit": "ml" }
+  ]
+}
+
+### Ändern -> 200
+PUT http://localhost:8080/mocktails/3
+Content-Type: application/json
+
+{
+  "name": "Shirley Deluxe",
+  "beschreibung": "mit Kirsche",
+  "zubereitung": "auf Eis",
+  "zutaten": [ { "name": "Ginger Ale", "menge": 200, "einheit": "ml" } ]
+}
+
+### Löschen -> 204
+DELETE http://localhost:8080/mocktails/3
+
+### Fehlerfall -> 400
+POST http://localhost:8080/mocktails
+Content-Type: application/json
+
+{ "name": "", "zutaten": [] }
