@@ -14,13 +14,12 @@ import jakarta.ws.rs.core.Response;
 @Path("/mocktails/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class MocktailIdRessource {
+public class MocktailIdResource {
 
     @Inject
     MocktailKatalog katalog;
 
     @PUT
-
     public MocktailDTO aendereMocktail(@PathParam("id") long id, MocktailEingabeDTO dto){
         if(dto == null){
             throw new IllegalArgumentException("Request fehlt");
