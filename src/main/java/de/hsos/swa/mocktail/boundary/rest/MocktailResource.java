@@ -3,11 +3,8 @@ package de.hsos.swa.mocktail.boundary.rest;
 
 import de.hsos.swa.mocktail.boundary.dto.MocktailDTO;
 import de.hsos.swa.mocktail.boundary.dto.MocktailEingabeDTO;
-import de.hsos.swa.mocktail.control.MocktailAbfragen;
-import de.hsos.swa.mocktail.control.MocktailAendern;
-import de.hsos.swa.mocktail.control.MocktailErstellen;
-import de.hsos.swa.mocktail.control.MocktailLoeschen;
 import de.hsos.swa.mocktail.entity.Mocktail;
+import de.hsos.swa.mocktail.entity.MocktailKatalog;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -28,24 +25,15 @@ public class MocktailResource {
 
 
     @Inject
-    MocktailAbfragen abfragen;
-
-    @Inject
-    MocktailErstellen erstellen;
-
-    @Inject
-    MocktailAendern aendern;
-
-    @Inject
-    MocktailLoeschen loeschen;
+    MocktailKatalog katalog;
 
     @GET
     public List<MocktailDTO> alleMocktails(@QueryParam("name") String name,@QueryParam("zutat") String zutat){
         List<Mocktail> mocktails;
         if(name == null && zutat == null){
-            mocktails = abfragen.alle();
+            mocktails = katalog.alle();
         }else {
-            mocktails=abfragen.suche(name, zutat);
+            mocktails = katalog.finde(name,zutat);
         }
         return mocktails.stream().map(MocktailDTO::von).toList();
 
@@ -55,33 +43,8 @@ public class MocktailResource {
         if(dto == null){
             throw new IllegalArgumentException("Request fehlt");
         }
-        Mocktail neuerMocktail = erstellen.erstelle(dto.name,dto.beschreibung,dto.zubereitung,dto.zutatenAlsEntity());
+        Mocktail neuerMocktail = katalog.speichere(new Mocktail(dto.name,dto.beschreibung,dto.zubereitung,dto.zutatenAlsEntity()));
         URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(neuerMocktail.getId())).build();
         return Response.created(location).entity(MocktailDTO.von(neuerMocktail)).build();
     }
-
-    @PUT
-    @Path("{id}")
-    public MocktailDTO aendereMocktail(@PathParam("id") long id, MocktailEingabeDTO dto){
-        if(dto == null){
-            throw new IllegalArgumentException("Request fehlt");
-        }
-        Mocktail geaendert = aendern.aendere(id, dto.name, dto.beschreibung, dto.zubereitung, dto.zutatenAlsEntity());
-        return MocktailDTO.von(geaendert);
-    }
-
-    @DELETE
-    @Path("{id}")
-    public Response loescheMocktail(@PathParam("id") long id){
-        loeschen.loesche(id);
-        return Response.noContent().build();
-    }
-
-    @GET
-    @Path("{id}")
-    public MocktailDTO mocktail(@PathParam("id") long id){
-        return MocktailDTO.von(abfragen.finde(id));
-    }
-
-
 }

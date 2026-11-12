@@ -8,6 +8,8 @@ public interface MocktailKatalog {
 
     Mocktail finde(long id);
 
+    List<Mocktail> finde(String name, String zutat);
+
     Mocktail speichere(Mocktail mocktail);
 
     boolean loesche(long id);

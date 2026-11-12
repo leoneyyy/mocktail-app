@@ -45,8 +45,37 @@ public class MocktailRepository implements MocktailKatalog {
     }
 
     @Override
+    public List<Mocktail> finde(String name, String zutat) {
+        List<Mocktail> suchErgebnis = new ArrayList<>();
+        for(Mocktail m: mocktails.values()){
+            if(gefunden(m,name,zutat)){
+                suchErgebnis.add(m);
+            }
+        }
+
+        return suchErgebnis;
+    }
+
+    private boolean gefunden(Mocktail mocktail, String name, String zutat){
+        if(name != null && !mocktail.getName().toLowerCase().contains(name.toLowerCase())){
+            return false;
+        }
+        if(zutat != null){
+            for(Zutat z: mocktail.getZutaten()){
+                if(z.name().toLowerCase().contains(zutat.toLowerCase())){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        return true;
+    }
+
+    @Override
     public Mocktail speichere(Mocktail mocktail) {
-        if(mocktail.getId() ==0){
+        if(mocktail.getId() == 0){
             mocktail.setId(this.idGenerator.getAndIncrement());
         }
 
