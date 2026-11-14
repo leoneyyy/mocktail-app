@@ -7,11 +7,11 @@ import java.util.List;
 @Schema(description = "Eingabedaten für ein Mocktail-Rezept")
 public class MocktailEingabeDTO {
 
-    @Schema(description = "Name des Mocktails",example = "Virgin Mojito", required = true)
+    @Schema(description = "Name des Mocktails",examples = {"Virgin Mojito"}, required = true)
     public String name;
-    @Schema(description = "Kurze Beschreibung des Mocktails", example = "Frisch mit Minze und Limette")
+    @Schema(description = "Kurze Beschreibung des Mocktails", examples = {"Frisch mit Minze und Limette"})
     public String beschreibung;
-    @Schema(description = "Anleitung für Mocktail-Rezept", example = "Minze zerdrücken, Eis dazu, mit Soda auffüllen")
+    @Schema(description = "Anleitung für Mocktail-Rezept", examples = {"Minze zerdrücken, Eis dazu, mit Soda auffüllen"})
     public String zubereitung;
     @Schema(description = "Auflistung der verwendeten Zutaten", required = true)
     public List<ZutatDTO> zutaten;

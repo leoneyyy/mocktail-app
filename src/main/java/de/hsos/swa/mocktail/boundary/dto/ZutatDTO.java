@@ -5,11 +5,11 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(description = "Eine Zutat mit Menge und Einheit")
 public class ZutatDTO {
-    @Schema(description = "Name der Zutat", example = "Minze")
+    @Schema(description = "Name der Zutat", examples = {"Minze"})
     public String name;
-    @Schema(description = "Menge", example = "8")
+    @Schema(description = "Menge", examples = {"8"})
     public double menge;
-    @Schema(description = "Einheit der Menge", example = "Blaetter")
+    @Schema(description = "Einheit der Menge", examples = {"Blaetter"})
     public String einheit;
 
     public ZutatDTO() {}

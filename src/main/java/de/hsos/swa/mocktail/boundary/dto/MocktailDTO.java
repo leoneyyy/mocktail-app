@@ -2,20 +2,18 @@ package de.hsos.swa.mocktail.boundary.dto;
 
 import de.hsos.swa.mocktail.entity.Mocktail;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Schema(description = "Mocktail, wie ihn die API zurueckgibt")
 public class MocktailDTO {
 
-    @Schema(description = "Vom Server vegebene ID", example ="1", readOnly = true)
+    @Schema(description = "Vom Server vegebene ID", examples ={"1"}, readOnly = true)
     public long id;
-    @Schema(description = "Name des Mocktails", example = "Virgin Mojito")
+    @Schema(description = "Name des Mocktails", examples = {"Virgin Mojito"})
     public String name;
-    @Schema(description = "Beschreibung des Mocktails", example = "Frisch mit Minze und Limette")
+    @Schema(description = "Beschreibung des Mocktails", examples = {"Frisch mit Minze und Limette"})
     public String beschreibung;
-    @Schema(description = "Zubereitung des Mocktails", example = "Minze zerdruecken, Eis dazu, mit Soda auffuellen")
+    @Schema(description = "Zubereitung des Mocktails", examples = {"Minze zerdruecken, Eis dazu, mit Soda auffuellen"})
     public String zubereitung;
     @Schema(description = "Zutaten des Mocktails")
     public List<ZutatDTO> zutaten;
