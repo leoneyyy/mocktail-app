@@ -65,12 +65,7 @@ public class MocktailRepository implements MocktailKatalog {
             return false;
         }
         if(zutat != null){
-            for(Zutat z: mocktail.getZutaten()){
-                if(z.name().toLowerCase().contains(zutat.toLowerCase())){
-                    return true;
-                }
-            }
-            return false;
+           return mocktail.enthaeltZutat(zutat);
         }
 
 
@@ -80,13 +75,14 @@ public class MocktailRepository implements MocktailKatalog {
     @Override
     public Mocktail speichere(Mocktail mocktail) {
 
+        Mocktail mitId = mocktail;
         if(mocktail.getId() == 0){
-            mocktail.setId(this.idGenerator.getAndIncrement());
+            mitId = new Mocktail(idGenerator.getAndIncrement(),mocktail.getName(),mocktail.getBeschreibung(),mocktail.getZubereitung(),mocktail.getZutaten());
         }
 
-        mocktails.put(mocktail.getId(), mocktail);
-        LOG.tracef("speichere id=%d",mocktail.getId());
-        return mocktail;
+        mocktails.put(mitId.getId(), mitId);
+        LOG.tracef("speichere id=%d",mitId.getId());
+        return mitId;
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Mocktail {
 
-    private long id;
+    private final long id;
     private String name;
     private String beschreibung;
     private String zubereitung;
@@ -12,12 +12,16 @@ public class Mocktail {
 
 
     public Mocktail(String name, String beschreibung, String zubereitung, List<Zutat> zutaten) {
+        this(0,name,beschreibung,zubereitung,zutaten);
+    }
+    public Mocktail(long id, String name, String beschreibung,String zubereitung, List<Zutat> zutaten) {
+        this.id = id;
         aendere(name,beschreibung,zubereitung,zutaten);
     }
 
-    public void aendere(String name, String beschreibung, String zubereitung, List<Zutat> zutaten) {
+    public final void aendere(String name, String beschreibung, String zubereitung, List<Zutat> zutaten) {
         if(name==null|| name.isBlank()){
-            throw new IllegalArgumentException("Name darf nich leer sein");
+            throw new IllegalArgumentException("Name darf nicht leer sein");
         }
         if(zutaten==null || zutaten.isEmpty()){
             throw new IllegalArgumentException("Ein Mocktail muss mindestens eine Zutat haben");
@@ -25,8 +29,9 @@ public class Mocktail {
         this.name=name.trim();
         this.beschreibung=beschreibung;
         this.zubereitung=zubereitung;
+        List<Zutat> kopieZutaten = List.copyOf(zutaten);
         this.zutaten.clear();
-        this.zutaten.addAll(zutaten);
+        this.zutaten.addAll(kopieZutaten);
     }
 
     public boolean enthaeltZutat(String zutat){
@@ -58,14 +63,6 @@ public class Mocktail {
 
     public List<Zutat> getZutaten() {
         return Collections.unmodifiableList(zutaten);
-    }
-
-    public void setId(long id) {
-        if(this.id !=0){
-            throw  new IllegalStateException("id ist schon vergeben");
-        }
-        this.id = id;
-
     }
 
     @Override
