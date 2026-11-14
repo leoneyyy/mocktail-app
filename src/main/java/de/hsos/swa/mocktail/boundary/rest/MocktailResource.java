@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import org.jboss.logging.Logger;
 
 import java.net.URI;
 import java.util.List;
@@ -22,29 +23,33 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class MocktailResource {
 
-
+    private static final Logger LOG = Logger.getLogger(MocktailResource.class.getName());
 
     @Inject
     MocktailKatalog katalog;
 
     @GET
     public List<MocktailDTO> alleMocktails(@QueryParam("name") String name,@QueryParam("zutat") String zutat){
+        LOG.debugf("GET /mocktails name=%s zutat=%s", name, zutat);
         List<Mocktail> mocktails;
         if(name == null && zutat == null){
             mocktails = katalog.alle();
         }else {
             mocktails = katalog.finde(name,zutat);
         }
+        LOG.debugf("%d Mocktails gefunden",mocktails.size());
         return mocktails.stream().map(MocktailDTO::von).toList();
 
     }
     @POST
     public Response erstelleMocktail(MocktailEingabeDTO dto, @Context UriInfo uriInfo) {
+        LOG.debug("POST /mocktails");
         if(dto == null){
             throw new IllegalArgumentException("Request fehlt");
         }
         Mocktail neuerMocktail = katalog.speichere(new Mocktail(dto.name,dto.beschreibung,dto.zubereitung,dto.zutatenAlsEntity()));
         URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(neuerMocktail.getId())).build();
+        LOG.infof("Mocktail %d '%s' erstellt: ",neuerMocktail.getId(), neuerMocktail.getName());
         return Response.created(location).entity(MocktailDTO.von(neuerMocktail)).build();
     }
 }

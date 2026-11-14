@@ -6,6 +6,7 @@ import de.hsos.swa.mocktail.entity.MocktailKatalog;
 import de.hsos.swa.mocktail.entity.Zutat;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.jboss.logging.Logger;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -14,6 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @ApplicationScoped
 public class MocktailRepository implements MocktailKatalog {
 
+    private static final Logger LOG = Logger.getLogger(MocktailRepository.class);
 
     private final Map<Long, Mocktail> mocktails = new ConcurrentSkipListMap<>();
 
@@ -35,16 +37,19 @@ public class MocktailRepository implements MocktailKatalog {
 
     @Override
     public List<Mocktail> alle() {
+        LOG.trace("alle()");
         return new ArrayList<>(mocktails.values());
     }
 
     @Override
     public Mocktail finde(long id) {
+        LOG.tracef("finde() id=%d",id);
         return mocktails.get(id);
     }
 
     @Override
     public List<Mocktail> finde(String name, String zutat) {
+        LOG.tracef("finde() name=%s zutat=%s",name,zutat);
         List<Mocktail> suchErgebnis = new ArrayList<>();
         for(Mocktail m: mocktails.values()){
             if(gefunden(m,name,zutat)){
@@ -74,16 +79,19 @@ public class MocktailRepository implements MocktailKatalog {
 
     @Override
     public Mocktail speichere(Mocktail mocktail) {
+
         if(mocktail.getId() == 0){
             mocktail.setId(this.idGenerator.getAndIncrement());
         }
 
         mocktails.put(mocktail.getId(), mocktail);
+        LOG.tracef("speichere id=%d",mocktail.getId());
         return mocktail;
     }
 
     @Override
     public boolean loesche(long id) {
+        LOG.tracef("loesche() id=%d",id);
         return mocktails.remove(id) != null;
     }
 
