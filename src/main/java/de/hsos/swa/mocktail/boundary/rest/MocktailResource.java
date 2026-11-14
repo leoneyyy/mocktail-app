@@ -12,13 +12,19 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.logging.Logger;
 
 import java.net.URI;
 import java.util.List;
 
 @Path("/mocktails")
-@ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class MocktailResource {
@@ -29,7 +35,12 @@ public class MocktailResource {
     MocktailKatalog katalog;
 
     @GET
-    public List<MocktailDTO> alleMocktails(@QueryParam("name") String name,@QueryParam("zutat") String zutat){
+    @Operation(summary = "Mocktails auflisten oder suchen",description = "Liefert alle Mocktails. Mit name und/oder zutat wird gefiltert")
+    @APIResponses({
+            @APIResponse(responseCode = "200",description = "Liste der Mocktails gefunden0",
+            content = @Content(schema = @Schema(type = SchemaType.ARRAY,implementation = MocktailDTO.class)))
+    })
+    public List<MocktailDTO> alleMocktails(@Parameter(description = "Teil des Names, Gross-/Kleinschreibung egal") @QueryParam("name") String name,@Parameter(description = "Teil eines Zutatennamens") @QueryParam("zutat") String zutat){
         LOG.debugf("GET /mocktails name=%s zutat=%s", name, zutat);
         List<Mocktail> mocktails;
         if(name == null && zutat == null){
@@ -42,6 +53,11 @@ public class MocktailResource {
 
     }
     @POST
+    @Operation(summary = "Mocktail anlegen",description = "Legt einen neuen Mocktail an und vergibt die ID")
+        @APIResponses({
+                @APIResponse(responseCode = "201", description = "Mocktail angelegt",content = @Content(schema = @Schema(implementation = MocktailDTO.class))),
+                @APIResponse(responseCode = "400",description = "Ungueltige Eingabe")
+        })
     public Response erstelleMocktail(MocktailEingabeDTO dto, @Context UriInfo uriInfo) {
         LOG.debug("POST /mocktails");
         if(dto == null){
@@ -49,7 +65,7 @@ public class MocktailResource {
         }
         Mocktail neuerMocktail = katalog.speichere(new Mocktail(dto.name,dto.beschreibung,dto.zubereitung,dto.zutatenAlsEntity()));
         URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(neuerMocktail.getId())).build();
-        LOG.infof("Mocktail %d '%s' erstellt: ",neuerMocktail.getId(), neuerMocktail.getName());
+        LOG.infof("Mocktail %d '%s' erstellt",neuerMocktail.getId(), neuerMocktail.getName());
         return Response.created(location).entity(MocktailDTO.von(neuerMocktail)).build();
     }
 }

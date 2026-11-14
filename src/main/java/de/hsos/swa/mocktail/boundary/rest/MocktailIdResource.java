@@ -10,6 +10,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.logging.Logger;
 
 
@@ -22,6 +27,13 @@ public class MocktailIdResource {
     @Inject
     MocktailKatalog katalog;
     @PUT
+    @Operation(summary = "Aenderung des Mocktail-Rezepts", description = "Aendere die Inhalte des Mocktail-Rezepts")
+    @APIResponses({
+            @APIResponse(responseCode = "200",description = "Mocktail-Rezept erfolgreich geändert",
+            content = @Content(schema = @Schema(implementation = MocktailDTO.class))),
+            @APIResponse(responseCode = "400",description = "Ungueltige Eingabe"),
+            @APIResponse(responseCode = "404",description = "Mocktail-Rezept nicht gefunden")
+    })
     public MocktailDTO aendereMocktail(@PathParam("id") long id, MocktailEingabeDTO dto){
         LOG.debugf("PUT /mocktails/%d", id);
         if(dto == null){
@@ -32,11 +44,18 @@ public class MocktailIdResource {
             throw new MocktailNichtGefundenException(id);
         }
         vorhandener.aendere(dto.name, dto.beschreibung, dto.zubereitung, dto.zutatenAlsEntity());
-        LOG.infof("Mocktail %d '%s' geaendert",vorhandener.getId(),vorhandener.getName());
-        return MocktailDTO.von(katalog.speichere(vorhandener));
+
+        Mocktail gespeichert = katalog.speichere(vorhandener);
+        LOG.infof("Mocktail %d '%s' geaendert",gespeichert.getId(),gespeichert.getName());
+        return MocktailDTO.von(gespeichert);
     }
 
     @DELETE
+    @Operation(summary = "Mocktail löschen",description = "Mocktail-Rezept löschen")
+    @APIResponses({
+            @APIResponse(responseCode = "204",description = "Mocktail-Rezept erfolgreich gelöscht"),
+            @APIResponse(responseCode = "404", description = "Mocktail-Rezept nicht gefunden")
+    })
     public Response loescheMocktail(@PathParam("id") long id){
        LOG.debugf("DELETE /mocktails/%d", id);
         if(!katalog.loesche(id)){
@@ -47,6 +66,12 @@ public class MocktailIdResource {
     }
 
     @GET
+    @Operation(summary = "Mocktail finden",description = "Mocktail-Rezept anhand der ID finden")
+    @APIResponses({
+            @APIResponse(responseCode = "200",description = "Mocktail-Rezept gefunden",
+            content = @Content(schema = @Schema(implementation = MocktailDTO.class))),
+            @APIResponse(responseCode = "404", description = "Mocktail-Rezept nicht gefunden")
+    })
     public MocktailDTO mocktail(@PathParam("id") long id){
         LOG.debugf("GET /mocktails/%d", id);
         Mocktail m = katalog.finde(id);
