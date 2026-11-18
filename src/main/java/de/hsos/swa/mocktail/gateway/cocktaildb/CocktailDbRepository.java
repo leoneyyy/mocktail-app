@@ -14,12 +14,11 @@ import org.jboss.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @ApplicationScoped
-public class CockatilDbRepository implements DrinkKatalog {
+public class CocktailDbRepository implements DrinkKatalog {
 
-    private static final Logger LOG = Logger.getLogger(CockatilDbRepository.class);
+    private static final Logger LOG = Logger.getLogger(CocktailDbRepository.class);
 
 
     @Inject
@@ -30,10 +29,10 @@ public class CockatilDbRepository implements DrinkKatalog {
     @Timeout(3000)
     @Retry(maxRetries = 2, delay = 500)
     @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5,delay = 10000)
-    @Fallback(fallbackMethod = "keinDrink")
-    public Optional<Drink> finde(String id) {
+    @Fallback(fallbackMethod = "keineDrinks")
+    public List<Drink> finde(String id) {
         LOG.debugf("CocktailDB: lookup id=%s", id);
-        return uebersetze(client.finde(id)).stream().findFirst();
+        return uebersetze(client.finde(id));
     }
 
     @Override
@@ -100,8 +99,4 @@ public class CockatilDbRepository implements DrinkKatalog {
         return new ArrayList<>();
     }
 
-    Optional<Drink> keinDrink(String id) {
-        LOG.warnf("CocktailDB nicht erreichbar oder Antwort unlesbar, Fallback fuer id '%s'", id);
-        return Optional.empty();
-    }
 }

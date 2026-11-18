@@ -1,6 +1,7 @@
 package de.hsos.swa.mocktail.boundary.rest;
 
 import de.hsos.swa.mocktail.boundary.dto.CocktailDTO;
+import de.hsos.swa.mocktail.entity.Drink;
 import de.hsos.swa.mocktail.entity.DrinkKatalog;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -15,6 +16,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.logging.Logger;
+
+import java.util.List;
 
 @Path("/drinks/cocktail/{id}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -34,8 +37,10 @@ public class CocktailIdResource {
     })
     public CocktailDTO cocktail(@PathParam("id") String id) {
         LOG.debugf("GET /drinks/cocktail/%s", id);
-        return katalog.finde(id)
-                .map(CocktailDTO::von)
-                .orElseThrow(() -> new NotFoundException("Cocktail mit ID " + id + " nicht gefunden"));
+        List<Drink> treffer = katalog.finde(id);
+        if (treffer.isEmpty()) {
+            throw new NotFoundException("Cocktail mit ID " + id + " nicht gefunden");
+        }
+        return CocktailDTO.von(treffer.get(0));
     }
 }

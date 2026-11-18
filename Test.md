@@ -105,7 +105,7 @@ Pfade in Git Bash: `/c/Users/Leon/...` (mit `/`), nicht `C:\Users\Leon\...`.
 | `boundary.dto` | `MocktailDTO`, `MocktailEingabeDTO`, `ZutatDTO`, `CocktailDTO` | Was über die Leitung geht, ist getrennt von den Entities. Der Client kann z. B. keine `id` setzen |
 | `entity` | `Mocktail`, `Zutat`, `Drink`, Interfaces `MocktailKatalog`, `DrinkKatalog` | Fachlogik und Validierung, kennt weder HTTP noch Datenbank |
 | `gateway.memory` | `MocktailRepository` | Speichert die eigenen Mocktails im Arbeitsspeicher |
-| `gateway.cocktaildb` | `CockatilDbRepository`, `CocktailDbClient`, `CocktailDbAntwort` | Anbindung an TheCocktailDB |
+| `gateway.cocktaildb` | `CocktailDbRepository`, `CocktailDbClient`, `CocktailDbAntwort` | Anbindung an TheCocktailDB |
 
 Die Resources hängen nur von den **Interfaces** im `entity`-Paket ab (`MocktailKatalog`, `DrinkKatalog`).
 Welche Implementierung dahintersteckt, entscheidet CDI. So kann man z. B. das Memory-Repository
@@ -157,7 +157,7 @@ d. h. es gibt eine Instanz für alle Requests. Deshalb dürfen sie keinen Zustan
 
 | Annotation | Wo | Was / Warum |
 |---|---|---|
-| `@ApplicationScoped` | `MocktailRepository`, `CockatilDbRepository` | Eine Instanz für die ganze Anwendung. Wichtig fürs Repository: alle Requests sehen dieselbe Map. Außerdem bekommt die Bean einen Proxy, über den die Fault-Tolerance-Annotationen erst funktionieren |
+| `@ApplicationScoped` | `MocktailRepository`, `CocktailDbRepository` | Eine Instanz für die ganze Anwendung. Wichtig fürs Repository: alle Requests sehen dieselbe Map. Außerdem bekommt die Bean einen Proxy, über den die Fault-Tolerance-Annotationen erst funktionieren |
 | `@Inject` | Feld | CDI setzt die passende Implementierung ein. Gefragt wird nach dem **Interface** (`MocktailKatalog`), geliefert wird `MocktailRepository` |
 | `@PostConstruct` | `beispieldaten()` | Läuft einmal, nachdem CDI die Bean erzeugt hat → legt die Beispiel-Mocktails an |
 
@@ -176,7 +176,7 @@ Mit `List` würde das Einlesen fehlschlagen.
 ### 8.4 Fault Tolerance (`org.eclipse.microprofile.faulttolerance`)
 
 Die CocktailDB ist ein fremder Dienst, der langsam oder weg sein kann. Damit unsere API trotzdem
-antwortet, sind die Methoden in `CockatilDbRepository` abgesichert:
+antwortet, sind die Methoden in `CocktailDbRepository` abgesichert:
 
 | Annotation | Bedeutung |
 |---|---|
@@ -285,7 +285,7 @@ Das Repository ist die unterste Schicht. Jede Anfrage geht hier durch, oft mehrm
 genau verfolgen will, was im Speicher passiert – etwa wenn eine ID falsch vergeben wird.
 Im normalen Betrieb wären sie nur Rauschen, deshalb das niedrigste Level.
 
-**`DEBUG` – am Anfang jeder Resource-Methode und im `CockatilDbRepository`**
+**`DEBUG` – am Anfang jeder Resource-Methode und im `CocktailDbRepository`**
 
 ```java
 LOG.debugf("GET /drinks/mocktail/%d", id);
@@ -318,7 +318,7 @@ Auch Quarkus selbst loggt mit `INFO` (z. B. `mocktail-app ... started in 3.5s`).
 ```java
 LOG.warnf("400 bad Request: %s", meldung);                    // EingabeFehlerMapper
 LOG.warnf("404 Not found: %s", exception.getMessage());       // FehlerMapper, NichtGefundenMapper
-LOG.warnf("CocktailDB nicht erreichbar ..., Fallback fuer '%s'", suchtext);  // CockatilDbRepository
+LOG.warnf("CocktailDB nicht erreichbar ..., Fallback fuer '%s'", suchtext);  // CocktailDbRepository
 ```
 
 - **400 / 404:** Der Request konnte nicht ausgeführt werden, aber die Anwendung hat sich korrekt
