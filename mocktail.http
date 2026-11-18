@@ -1,14 +1,14 @@
 ### Alle Mocktails
-GET http://localhost:8080/mocktails
+GET http://localhost:8080/drinks/mocktail
 
 ### Filtern nach Zutat
-GET http://localhost:8080/mocktails?zutat=minze
+GET http://localhost:8080/drinks/mocktail?zutat=minze
 
 ### Einen Mocktail
-GET http://localhost:8080/mocktails/1
+GET http://localhost:8080/drinks/mocktail/1
 
 ### Anlegen -> 201
-POST http://localhost:8080/mocktails
+POST http://localhost:8080/drinks/mocktail
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### Ändern -> 200
-PUT http://localhost:8080/mocktails/3
+PUT http://localhost:8080/drinks/mocktail/3
 Content-Type: application/json
 
 {
@@ -33,10 +33,22 @@ Content-Type: application/json
 }
 
 ### Löschen -> 204
-DELETE http://localhost:8080/mocktails/3
+DELETE http://localhost:8080/drinks/mocktail/3
 
 ### Fehlerfall -> 400
-POST http://localhost:8080/mocktails
+POST http://localhost:8080/drinks/mocktail
 Content-Type: application/json
 
 { "name": "", "zutaten": [] }
+
+### Cocktails von TheCocktailDB (ohne Filter: alkoholische)
+GET http://localhost:8080/drinks/cocktail
+
+### Cocktail nach Name
+GET http://localhost:8080/drinks/cocktail?name=mojito
+
+### Cocktail nach Zutat
+GET http://localhost:8080/drinks/cocktail?zutat=mint
+
+### Ein Cocktail mit Details
+GET http://localhost:8080/drinks/cocktail/11000

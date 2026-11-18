@@ -1,9 +1,11 @@
 package de.hsos.swa.mocktail.gateway.cocktaildb;
 
-import java.util.List;
-import java.util.Map;
-
 public class CocktailDbAntwort {
 
-    public List<Map<String,String>> drinks;
+    /**
+     * TheCocktailDB liefert hier je nach Endpunkt und Treffer eine Liste von Drinks,
+     * null (search.php ohne Treffer) oder den String "no data found" (filter.php ohne Treffer).
+     * Deshalb Object statt List, sonst schlaegt das Deserialisieren fehl.
+     */
+    public Object drinks;
 }

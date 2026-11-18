@@ -18,7 +18,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.logging.Logger;
 
 
-@Path("/mocktails/{id}")
+@Path("/drinks/mocktail/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class MocktailIdResource {
@@ -35,7 +35,7 @@ public class MocktailIdResource {
             @APIResponse(responseCode = "404",description = "Mocktail-Rezept nicht gefunden")
     })
     public MocktailDTO aendereMocktail(@PathParam("id") long id, MocktailEingabeDTO dto){
-        LOG.debugf("PUT /mocktails/%d", id);
+        LOG.debugf("PUT /drinks/mocktail/%d", id);
         if(dto == null){
             throw new IllegalArgumentException("Request fehlt");
         }
@@ -57,7 +57,7 @@ public class MocktailIdResource {
             @APIResponse(responseCode = "404", description = "Mocktail-Rezept nicht gefunden")
     })
     public Response loescheMocktail(@PathParam("id") long id){
-       LOG.debugf("DELETE /mocktails/%d", id);
+       LOG.debugf("DELETE /drinks/mocktail/%d", id);
         if(!katalog.loesche(id)){
             throw new MocktailNichtGefundenException(id);
         }
@@ -73,12 +73,12 @@ public class MocktailIdResource {
             @APIResponse(responseCode = "404", description = "Mocktail-Rezept nicht gefunden")
     })
     public MocktailDTO mocktail(@PathParam("id") long id){
-        LOG.debugf("GET /mocktails/%d", id);
+        LOG.debugf("GET /drinks/mocktail/%d", id);
         Mocktail m = katalog.finde(id);
         if(m == null){
             throw new MocktailNichtGefundenException(id);
         }
-        LOG.debugf("Mocltail gefunden %s",m.getName());
+        LOG.debugf("Mocktail gefunden %s",m.getName());
         return MocktailDTO.von(m);
     }
 

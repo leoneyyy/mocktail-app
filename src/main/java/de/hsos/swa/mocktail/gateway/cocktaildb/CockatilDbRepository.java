@@ -14,7 +14,7 @@ import org.jboss.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.Optional;
 
 @ApplicationScoped
 public class CockatilDbRepository implements DrinkKatalog {
@@ -25,6 +25,16 @@ public class CockatilDbRepository implements DrinkKatalog {
     @Inject
     @RestClient
     CocktailDbClient client;
+
+    @Override
+    @Timeout(3000)
+    @Retry(maxRetries = 2, delay = 500)
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.5,delay = 10000)
+    @Fallback(fallbackMethod = "keinDrink")
+    public Optional<Drink> finde(String id) {
+        LOG.debugf("CocktailDB: lookup id=%s", id);
+        return uebersetze(client.finde(id)).stream().findFirst();
+    }
 
     @Override
     @Timeout(3000)
@@ -60,24 +70,38 @@ public class CockatilDbRepository implements DrinkKatalog {
 
     private List<Drink> uebersetze(CocktailDbAntwort antwort){
         List<Drink> drinks = new ArrayList<>();
-        if(antwort == null ||antwort.drinks == null){
+        // Kein Treffer: null oder "no data found" statt einer Liste
+        if(antwort == null || !(antwort.drinks instanceof List<?> liste)){
             return drinks;
         }
-        for(Map<String,String> d: antwort.drinks){
+        for(Object eintrag : liste){
+            if(!(eintrag instanceof Map<?,?> d)){
+                continue;
+            }
             List<String> zutaten = new ArrayList<>();
             for (int i = 1; i <= 15 ; i++) {
-                String zutat = d.get("strIngredient" + i);
-                if(zutat != null){
+                String zutat = text(d, "strIngredient" + i);
+                if(zutat != null && !zutat.isBlank()){
                     zutaten.add(zutat);
                 }
             }
-            drinks.add(new Drink(d.get("idDrink"), d.get("strDrink"),d.get("strInstructions"),zutaten));
+            drinks.add(new Drink(text(d, "idDrink"), text(d, "strDrink"), text(d, "strInstructions"), zutaten));
         }
 
         return drinks;
     }
+
+    private static String text(Map<?,?> drink, String feld){
+        Object wert = drink.get(feld);
+        return wert == null ? null : wert.toString();
+    }
     List<Drink> keineDrinks(String suchtext) {
         LOG.warnf("CocktailDB nicht erreichbar oder Antwort unlesbar, Fallback fuer '%s'", suchtext);
         return new ArrayList<>();
+    }
+
+    Optional<Drink> keinDrink(String id) {
+        LOG.warnf("CocktailDB nicht erreichbar oder Antwort unlesbar, Fallback fuer id '%s'", id);
+        return Optional.empty();
     }
 }

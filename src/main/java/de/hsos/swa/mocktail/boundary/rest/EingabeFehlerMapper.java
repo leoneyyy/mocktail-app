@@ -14,7 +14,8 @@ public class EingabeFehlerMapper implements ExceptionMapper<IllegalArgumentExcep
 
     @Override
     public Response toResponse(IllegalArgumentException e) {
-        LOG.warnf("400 bad Request: %s", e.getMessage());
-        return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(Map.of("fehler",e.getMessage())).build();
+        String meldung = e.getMessage() != null ? e.getMessage() : "Ungueltige Eingabe";
+        LOG.warnf("400 bad Request: %s", meldung);
+        return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(Map.of("fehler", meldung)).build();
     }
 }

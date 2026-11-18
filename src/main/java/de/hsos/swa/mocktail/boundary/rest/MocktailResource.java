@@ -5,7 +5,7 @@ import de.hsos.swa.mocktail.boundary.dto.MocktailDTO;
 import de.hsos.swa.mocktail.boundary.dto.MocktailEingabeDTO;
 import de.hsos.swa.mocktail.entity.Mocktail;
 import de.hsos.swa.mocktail.entity.MocktailKatalog;
-import jakarta.enterprise.context.ApplicationScoped;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
@@ -24,7 +24,7 @@ import org.jboss.logging.Logger;
 import java.net.URI;
 import java.util.List;
 
-@Path("/mocktails")
+@Path("/drinks/mocktail")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class MocktailResource {
@@ -37,18 +37,20 @@ public class MocktailResource {
     @GET
     @Operation(summary = "Mocktails auflisten oder suchen",description = "Liefert alle Mocktails. Mit name und/oder zutat wird gefiltert")
     @APIResponses({
-            @APIResponse(responseCode = "200",description = "Liste der Mocktails gefunden0",
+            @APIResponse(responseCode = "200",description = "Liste der gefundenen Mocktails",
             content = @Content(schema = @Schema(type = SchemaType.ARRAY,implementation = MocktailDTO.class)))
     })
-    public List<MocktailDTO> alleMocktails(@Parameter(description = "Teil des Names, Gross-/Kleinschreibung egal") @QueryParam("name") String name,@Parameter(description = "Teil eines Zutatennamens") @QueryParam("zutat") String zutat){
-        LOG.debugf("GET /mocktails name=%s zutat=%s", name, zutat);
+    public List<MocktailDTO> alleMocktails(
+            @Parameter(description = "Teil des Namens, Gross-/Kleinschreibung egal") @QueryParam("name") String name,
+            @Parameter(description = "Teil eines Zutatennamens") @QueryParam("zutat") String zutat){
+        LOG.debugf("GET /drinks/mocktail name=%s zutat=%s", name, zutat);
         List<Mocktail> mocktails;
         if(name == null && zutat == null){
             mocktails = katalog.alle();
-        }else {
-            mocktails = katalog.finde(name,zutat);
+        } else {
+            mocktails = katalog.finde(name, zutat);
         }
-        LOG.debugf("%d Mocktails gefunden",mocktails.size());
+        LOG.debugf("%d Mocktails gefunden", mocktails.size());
         return mocktails.stream().map(MocktailDTO::von).toList();
 
     }
@@ -59,7 +61,7 @@ public class MocktailResource {
                 @APIResponse(responseCode = "400",description = "Ungueltige Eingabe")
         })
     public Response erstelleMocktail(MocktailEingabeDTO dto, @Context UriInfo uriInfo) {
-        LOG.debug("POST /mocktails");
+        LOG.debug("POST /drinks/mocktail");
         if(dto == null){
             throw new IllegalArgumentException("Request fehlt");
         }
