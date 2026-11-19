@@ -9,10 +9,7 @@ import org.jboss.logging.Logger;
 
 import java.util.Map;
 
-/**
- * Liefert auch fuer NotFoundException (unbekannter Cocktail, unbekannter Pfad)
- * dasselbe JSON-Fehlerformat wie die anderen Mapper.
- */
+
 @Provider
 public class NichtGefundenMapper implements ExceptionMapper<NotFoundException> {
 

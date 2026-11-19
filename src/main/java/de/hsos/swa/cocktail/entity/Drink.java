@@ -1,4 +1,4 @@
-package de.hsos.swa.mocktail.entity;
+package de.hsos.swa.cocktail.entity;
 
 import java.util.List;
 

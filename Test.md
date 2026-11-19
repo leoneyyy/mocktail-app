@@ -196,7 +196,8 @@ Diese Annotationen ändern **nichts am Verhalten**, sie beschreiben die API für
 
 | Annotation | Wo | Was |
 |---|---|---|
-| `@OpenAPIDefinition(info = @Info(...))` | `MocktailApplication` | Titel, Version, Beschreibung der ganzen API. Die Klasse `extends Application` ist in Quarkus nicht nötig, sie dient nur als Träger dieser Annotation |
+| `@OpenAPIDefinition(info = @Info(...), tags = {...})` | `DrinkApplication` | Titel, Version, Beschreibung der ganzen API und die Liste der Tags. Die Klasse `extends Application` ist in Quarkus nicht nötig, sie dient nur als Träger dieser Annotation. Die Version ist `2.0.0`, weil sich die Pfade inkompatibel geändert haben (`/mocktails` → `/drinks/mocktail`) |
+| `@Tag(name = "Mocktails")` | Resource-Klasse | Gruppiert die Endpunkte in der Swagger UI: alle Mocktail-Endpunkte unter „Mocktails“, alle Cocktail-Endpunkte unter „Cocktails“. Die Beschreibung der Tags steht einmal zentral in `DrinkApplication` |
 | `@Operation(summary, description)` | Methode | Überschrift und Text des Endpunkts |
 | `@APIResponses` / `@APIResponse(responseCode, description, content)` | Methode | Welche Statuscodes vorkommen können und was zurückkommt |
 | `@Content(schema = @Schema(implementation = MocktailDTO.class))` | in `@APIResponse` | Welcher Typ im Body steht. `type = SchemaType.ARRAY` → eine Liste davon |

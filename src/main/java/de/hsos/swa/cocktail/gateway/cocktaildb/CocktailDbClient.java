@@ -1,4 +1,4 @@
-package de.hsos.swa.mocktail.gateway.cocktaildb;
+package de.hsos.swa.cocktail.gateway.cocktaildb;
 
 
 import jakarta.ws.rs.GET;

@@ -19,11 +19,13 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.logging.Logger;
 
 import java.net.URI;
 import java.util.List;
 
+@Tag(name = "Mocktails")
 @Path("/drinks/mocktail")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -65,7 +67,7 @@ public class MocktailResource {
         if(dto == null){
             throw new IllegalArgumentException("Request fehlt");
         }
-        Mocktail neuerMocktail = katalog.speichere(new Mocktail(dto.name,dto.beschreibung,dto.zubereitung,dto.zutatenAlsEntity()));
+        Mocktail neuerMocktail = katalog.speichere(new Mocktail(dto.name(), dto.beschreibung(), dto.zubereitung(),dto.zutatenAlsEntity()));
         URI location = uriInfo.getAbsolutePathBuilder().path(String.valueOf(neuerMocktail.getId())).build();
         LOG.infof("Mocktail %d '%s' erstellt",neuerMocktail.getId(), neuerMocktail.getName());
         return Response.created(location).entity(MocktailDTO.von(neuerMocktail)).build();

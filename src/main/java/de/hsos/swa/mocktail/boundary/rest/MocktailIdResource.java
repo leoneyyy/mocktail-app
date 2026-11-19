@@ -15,9 +15,11 @@ import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.logging.Logger;
 
 
+@Tag(name = "Mocktails")
 @Path("/drinks/mocktail/{id}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -43,7 +45,7 @@ public class MocktailIdResource {
         if(vorhandener == null){
             throw new MocktailNichtGefundenException(id);
         }
-        vorhandener.aendere(dto.name, dto.beschreibung, dto.zubereitung, dto.zutatenAlsEntity());
+        vorhandener.aendere(dto.name(), dto.beschreibung(), dto.zubereitung(), dto.zutatenAlsEntity());
 
         Mocktail gespeichert = katalog.speichere(vorhandener);
         LOG.infof("Mocktail %d '%s' geaendert",gespeichert.getId(),gespeichert.getName());

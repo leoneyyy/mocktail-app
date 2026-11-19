@@ -1,7 +1,7 @@
-package de.hsos.swa.mocktail.gateway.cocktaildb;
+package de.hsos.swa.cocktail.gateway.cocktaildb;
 
-import de.hsos.swa.mocktail.entity.Drink;
-import de.hsos.swa.mocktail.entity.DrinkKatalog;
+import de.hsos.swa.cocktail.entity.Drink;
+import de.hsos.swa.cocktail.entity.DrinkKatalog;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.faulttolerance.CircuitBreaker;

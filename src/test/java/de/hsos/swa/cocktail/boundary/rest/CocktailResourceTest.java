@@ -1,4 +1,4 @@
-package de.hsos.swa.mocktail.boundary.rest;
+package de.hsos.swa.cocktail.boundary.rest;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

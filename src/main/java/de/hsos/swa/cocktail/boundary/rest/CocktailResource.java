@@ -1,8 +1,8 @@
-package de.hsos.swa.mocktail.boundary.rest;
+package de.hsos.swa.cocktail.boundary.rest;
 
-import de.hsos.swa.mocktail.boundary.dto.CocktailDTO;
-import de.hsos.swa.mocktail.entity.Drink;
-import de.hsos.swa.mocktail.entity.DrinkKatalog;
+import de.hsos.swa.cocktail.boundary.dto.CocktailDTO;
+import de.hsos.swa.cocktail.entity.Drink;
+import de.hsos.swa.cocktail.entity.DrinkKatalog;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -16,10 +16,12 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.logging.Logger;
 
 import java.util.List;
 
+@Tag(name = "Cocktails")
 @Path("/drinks/cocktail")
 @Produces(MediaType.APPLICATION_JSON)
 public class CocktailResource {
@@ -43,7 +45,6 @@ public class CocktailResource {
         LOG.debugf("GET /drinks/cocktail name=%s zutat=%s", name, zutat);
         List<Drink> drinks;
         if (name != null) {
-            // Die Namenssuche liefert die Zutaten mit, also hier lokal nach Zutat filtern
             drinks = katalog.sucheNachName(name);
             if (zutat != null) {
                 drinks = drinks.stream().filter(d -> d.enthaeltZutat(zutat)).toList();
